@@ -88,7 +88,7 @@ $(document).ready(function() {
 
         var geoJson_string = JSON.stringify(exMap);
 
-        emailjs.sendForm("default_service", "gds_map", { geoJson_string: geoJson_string});
+        emailjs.sendForm("default_service", "gds_map", { geoJson_string: geoJson_string });
 
     }
 
@@ -151,7 +151,16 @@ $(document).ready(function() {
     });
 
     function addPopup(layer) {
-        var content = document.createElement("textarea");
+
+
+        var content = document.createElement("h5"); 
+        var t = document.createTextNode("Name/ID:"); 
+        content.appendChild(t); 
+        var lb = document.createElement("br"); 
+        content.appendChild(lb); 
+        var ta = document.createElement("input");
+        content.appendChild(ta); 
+
         content.addEventListener("keyup", function() {
             layer.feature.properties.desc = content.value;
         });
