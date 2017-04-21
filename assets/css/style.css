@@ -1,0 +1,22 @@
+/*#mapid { height: 600px; }*/
+
+html,
+body,
+#container {
+/*    height: 100%;*/
+/*    overflow: hidden;*/
+    /*width: 100%;*/
+    margin-top: 20px;
+}
+
+#mapid {
+    width: 100%;
+    position: inherit;
+    height: 650px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+    border-radius: 8px;
+}
+
+.leaflet-routing-container-hide {display: none;}
