@@ -20,6 +20,7 @@ $(document).ready(function() {
 
     // create map container setting focus on location and zoom level
     mymap = L.map("mapid").setView([35.065017, -80.782693], 14);
+
     // add marker for location to map
     // var marker = L.marker([35.065017, -80.782693]).addTo(mymap);
     // // create popup at marker location
@@ -42,13 +43,10 @@ $(document).ready(function() {
             maxZoom: 18,
         }).addTo(mymap);
 
-    // mapLink =
-    //     '<a href="http://stamen.com">Stamen Design</a>';
-    // L.tileLayer(
-    //     'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', {
-    //         attribution: '&copy; ' + mapLink + ' Contributors',
-    //         maxZoom: 18,
-    //     }).addTo(mymap);
+    L.easyButton('<span class="glyphicon glyphicon-screenshot"></span>', function(btn, mymap) {
+        mapMe()
+    }).addTo(mymap);
+
 
     function mapMe() {
         var userPositionPromise = new Promise(function(resolve, reject) {
@@ -79,30 +77,23 @@ $(document).ready(function() {
             });
     };
 
+    var editableLayers = new L.FeatureGroup();
+    mymap.addLayer(editableLayers);
+
     function exportMap() {
         var exMap = editableLayers.toGeoJSON();
         console.log(exMap);
+        var formatexMap = JSON.stringify(editableLayers.toGeoJSON(), null, 2);
+        console.log(formatexMap);
         database.ref().push({
-            geoJson: exMap
+            geoJson: formatexMap
         });
 
         var geoJson_string = JSON.stringify(exMap);
 
-        emailjs.sendForm("default_service", "gds_map", { geoJson_string: geoJson_string });
+        emailjs.send("default_service", "gds_map", { geoJson_string: formatexMap });
 
     }
-
-    var editableLayers = new L.FeatureGroup();
-    mymap.addLayer(editableLayers);
-
-    var MyCustomMarker = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconAnchor: new L.Point(12, 12),
-            iconSize: new L.Point(24, 24)
-                // iconUrl: 'link/to/image.png'
-        }
-    });
 
     var options = {
         position: 'topright',
@@ -116,7 +107,8 @@ $(document).ready(function() {
             polygon: {
                 allowIntersection: true,
                 shapeOptions: {
-                    color: '#red'
+                    // color: '#red',
+                    // weight: 10
                 }
             },
             circle: false, // Turns off this drawing tool
@@ -150,17 +142,10 @@ $(document).ready(function() {
         addPopup(layer);
     });
 
+
+
     function addPopup(layer) {
-
-
-        var content = document.createElement("h5"); 
-        var t = document.createTextNode("Name/ID:"); 
-        content.appendChild(t); 
-        var lb = document.createElement("br"); 
-        content.appendChild(lb); 
-        var ta = document.createElement("input");
-        content.appendChild(ta); 
-
+        var content = document.createElement("textarea");
         content.addEventListener("keyup", function() {
             layer.feature.properties.desc = content.value;
         });
@@ -170,7 +155,6 @@ $(document).ready(function() {
         });
         layer.bindPopup(content).openPopup();
     }
-
 
     $(document).on("click", "#locMe", mapMe);
     $(document).on("click", "#exportMap", exportMap);
