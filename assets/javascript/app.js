@@ -1,5 +1,10 @@
 $(document).ready(function() {
 
+
+// todo
+// display list of maps in html
+// select and view in leaflet
+
     // Initialize Firebase
     var config = {
         apiKey: "AIzaSyBtOVuhH_xZpkcRvYSfmLEBtAZ5VdtbbVE",
@@ -68,6 +73,7 @@ $(document).ready(function() {
                 fLat = data.coords.latitude;
                 fLon = data.coords.longitude;
 
+                mymap.panTo([fLat, fLon]);
                 var umarker = L.marker([fLat, fLon]).addTo(mymap);
                 umarker.bindPopup("<h4>You are here</h4>").openPopup();
 
@@ -86,7 +92,7 @@ $(document).ready(function() {
         var formatexMap = JSON.stringify(editableLayers.toGeoJSON(), null, 2);
         console.log(formatexMap);
         database.ref().push({
-            geoJson: formatexMap
+            geoJson: exMap
         });
 
         var geoJson_string = JSON.stringify(exMap);
