@@ -1,9 +1,9 @@
 $(document).ready(function() {
 
 
-// todo
-// display list of maps in html
-// select and view in leaflet
+    // todo
+    // display list of maps in html
+    // select and view in leaflet
 
     // Initialize Firebase
     var config = {
@@ -87,6 +87,7 @@ $(document).ready(function() {
     mymap.addLayer(editableLayers);
 
     function exportMap() {
+        event.preventDefault();
         var exMap = editableLayers.toGeoJSON();
         console.log(exMap);
         var formatexMap = JSON.stringify(editableLayers.toGeoJSON(), null, 2);
@@ -97,8 +98,16 @@ $(document).ready(function() {
 
         var geoJson_string = JSON.stringify(exMap);
 
-        emailjs.send("default_service", "gds_map", { geoJson_string: formatexMap });
+        var fFullname = $("#full_name_id").val().trim();
+        var fEmail = $("#email_id").val().trim();
+        var fStreet1 = $("#street1_id").val().trim();
+        var fStreet2 = $("#street2_id").val().trim();
+        var fCity = $("#city_id").val().trim();
+        var fState = $("#state_id").val().trim();
+        var fZip = $("#zip_id").val().trim();
 
+        console.log(fFullname, fEmail, fStreet1, fStreet2, fCity, fState, fZip);
+        // emailjs.send("default_service", "gds_map", { geoJson_string: geoJson_string });
     }
 
     var options = {
