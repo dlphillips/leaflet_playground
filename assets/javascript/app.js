@@ -24,7 +24,7 @@ $(document).ready(function() {
     var mymap = "";
 
     // create map container setting focus on location and zoom level
-    mymap = L.map("mapid").setView([35.065017, -80.782693], 14);
+    mymap = L.map("mapid").setView([39.102242, -94.665011], 5);
 
     // add marker for location to map
     // var marker = L.marker([35.065017, -80.782693]).addTo(mymap);
@@ -49,8 +49,13 @@ $(document).ready(function() {
         }).addTo(mymap);
 
     L.easyButton('<span class="glyphicon glyphicon-screenshot"></span>', function(btn, mymap) {
-        mapMe()
+        mapMe();
     }).addTo(mymap);
+
+    L.Control.geocoder().addTo(mymap);
+
+// AIzaSyD6VFgAz1CR2V0IaKvA_zmGFZkFqpt6vNk
+
 
 
     function mapMe() {
@@ -65,7 +70,7 @@ $(document).ready(function() {
                 reject({
                     error: 'browser doesn\'t support geolocation'
                 });
-            };
+            }
         });
 
         userPositionPromise
@@ -73,7 +78,8 @@ $(document).ready(function() {
                 fLat = data.coords.latitude;
                 fLon = data.coords.longitude;
 
-                mymap.panTo([fLat, fLon]);
+                // mymap.panTo([fLat, fLon],12);
+                mymap.setView([fLat, fLon],11);
                 var umarker = L.marker([fLat, fLon]).addTo(mymap);
                 umarker.bindPopup("<h4>You are here</h4>").openPopup();
 
@@ -81,7 +87,7 @@ $(document).ready(function() {
             .catch(function(error) {
                 console.log('Error', error);
             });
-    };
+    }
 
     var editableLayers = new L.FeatureGroup();
     mymap.addLayer(editableLayers);
