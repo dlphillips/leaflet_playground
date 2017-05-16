@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-
     // todo
     // display list of maps in html
     // select and view in leaflet
@@ -23,30 +22,29 @@ $(document).ready(function() {
     var fLon = 0;
     var mymap = "";
 
-    // create map container setting focus on location and zoom level
-    mymap = L.map("mapid").setView([39.102242, -94.665011], 5);
-
-    // add marker for location to map
-    // var marker = L.marker([35.065017, -80.782693]).addTo(mymap);
-    // // create popup at marker location
-    // marker.bindPopup("<h4>BakeSale2Go is here!</h4>").openPopup();
-
     // mapLink =
-    //     '<a href="https://openstreetmap.org">OpenStreetMap</a>';
+    //     '<a href="#">ESRI 2017</a>';
     // L.tileLayer(
-    //     'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //         attribution: '&copy; ' + mapLink + ' Contributors',
+    //     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png', {
+    //         attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
     //         maxZoom: 18,
     //     }).addTo(mymap);
 
-    // map tiles (style) to use
-    mapLink =
-        '<a href="#">ESRI 2017</a>';
-    L.tileLayer(
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
-            maxZoom: 18,
-        }).addTo(mymap);
+
+    var mapLayer = MQ.mapLayer(),
+        map;
+
+    // mymap = L.map("mapid").setView([39.102242, -94.665011], 5);
+
+    mymap = L.map('mapid', { layers: mapLayer, center: [ 39.102242, -94.665011 ], zoom: 5 });
+
+    L.control.layers({
+        'Map': mapLayer,
+        'Hybrid': MQ.hybridLayer(),
+        'Satellite': MQ.satelliteLayer(),
+        'Dark': MQ.darkLayer(),
+        'Light': MQ.lightLayer()
+    }).addTo(mymap);
 
     L.easyButton('<span class="glyphicon glyphicon-screenshot"></span>', function(btn, mymap) {
         mapMe();
@@ -54,9 +52,7 @@ $(document).ready(function() {
 
     L.Control.geocoder().addTo(mymap);
 
-// AIzaSyD6VFgAz1CR2V0IaKvA_zmGFZkFqpt6vNk
-
-
+    // gmaps: AIzaSyD6VFgAz1CR2V0IaKvA_zmGFZkFqpt6vNk
 
     function mapMe() {
         var userPositionPromise = new Promise(function(resolve, reject) {
@@ -78,8 +74,7 @@ $(document).ready(function() {
                 fLat = data.coords.latitude;
                 fLon = data.coords.longitude;
 
-                // mymap.panTo([fLat, fLon],12);
-                mymap.setView([fLat, fLon],11);
+                mymap.setView([fLat, fLon], 11);
                 var umarker = L.marker([fLat, fLon]).addTo(mymap);
                 umarker.bindPopup("<h4>You are here</h4>").openPopup();
 
